@@ -17,6 +17,11 @@
     - freeipa_hostname
     - config
 
+- name: Ensure [ {{freeipa_address}} {{ freeipa_hostname }} ] in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{freeipa_address}} {{ freeipa_hostname }}"
+
 - name: Ensure firewalld service is [ {{ freeipa_firewall_state }} ]
   service:
     name: firewalld
