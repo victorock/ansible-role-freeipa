@@ -1,0 +1,88 @@
+---
+- name: Ensure [ {{ freeipa_packages | join(", ") }} ] are latest
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ freeipa_packages }}"
+  tags:
+    - freeipa
+    - freeipa_packages
+    - packages
+
+- name: Enforce hostname as fqdn to [ {{ freeipa_hostname }} ]
+  hostname:
+    name: "{{ freeipa_hostname }}"
+  tags:
+    - freeipa
+    - freeipa_hostname
+    - config
+
+- name: Ensure firewalld service is [ {{ freeipa_firewall_state }} ]
+  service:
+    name: firewalld
+    state: "{{ freeipa_firewall_state }}"
+    enabled: yes
+  tags:
+    - freeipa
+    - freeipa_security
+    - config
+
+- name: Ensure firewall rules for [ {{ freeipa_services | join(", ") }} ] are enabled
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  with_items: "{{ freeipa_services }}"
+  notify:
+    - Reload service firewalld
+  tags:
+  - freeipa
+  - freeipa_security
+  - configure
+
+- name: Ensure FreeIPA is configured
+  tags:
+  - freeipa
+  - freeipa_setup
+  - configure
+
+  block:
+    - name: Run command ipa-server-install
+      command:
+        ipa-server-install
+        -a {{ freeipa_admin_password }}
+        -p {{ freeipa_admin_password }}
+        --hostname {{ freeipa_hostname }}
+        --ip-address {{ freeipa_ipv4_address | ipv4 }}
+        --domain {{ freeipa_domain }}
+        --realm {{ freeipa_domain | upper }}
+        --setup-dns
+        --setup-kra
+        --auto-reverse
+        --allow-zone-overlap
+        --forwarder {{ freeipa_forwarder_primary | ipv4 }}
+        --forwarder {{ freeipa_forwarder_secondary | ipv4 }}
+        --idstart {{ freeipa_idstart | int }}
+        --idmax {{ freeipa_idmax | int }}
+        --mkhomedir
+        --no-dnssec-validation
+        --unattended
+      args:
+        creates: /var/log/ipaserver-install.log
+      register: register_command_ip_server_install
+
+  rescue:
+    - name: Save logfile /var/log/ipaserver-install.log to [ /var/log/ipaserver-install.log-{{ freeipa_time }} ]
+      copy:
+        src: /var/log/ipaserver-install.log
+        dest: "/var/log/ipaserver-install.log-{{ freeipa_time }}"
+
+    - name: Ensure logfile /var/log/ipaserver-install.log is absent, otherwise task ipa-server-install won't run
+      file:
+        path: /var/log/ipaserver-install.log
+        state: absent
+
+  always:
+    - debug: var=register_command_ip_server_install
+      when: freeipa_debug is defined
