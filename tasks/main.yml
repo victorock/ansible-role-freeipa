@@ -54,15 +54,15 @@
         -a {{ freeipa_admin_password }}
         -p {{ freeipa_admin_password }}
         --hostname {{ freeipa_hostname }}
-        --ip-address {{ freeipa_ipv4_address | ipv4 }}
+        --ip-address {{ freeipa_address | ipaddr }}
         --domain {{ freeipa_domain }}
         --realm {{ freeipa_domain | upper }}
         --setup-dns
         --setup-kra
         --auto-reverse
         --allow-zone-overlap
-        --forwarder {{ freeipa_forwarder_primary | ipv4 }}
-        --forwarder {{ freeipa_forwarder_secondary | ipv4 }}
+        --forwarder {{ freeipa_forwarder_primary | ipaddr }}
+        --forwarder {{ freeipa_forwarder_secondary | ipaddr }}
         --idstart {{ freeipa_idstart | int }}
         --idmax {{ freeipa_idmax | int }}
         --mkhomedir

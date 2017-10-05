@@ -1,4 +1,4 @@
-# Ansible Role: FreeIPA
+# Ansible Role: FreeIPA Server
 
 Installs FreeIPA on any RedHat/CentOS.
 
