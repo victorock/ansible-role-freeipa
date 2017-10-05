@@ -22,16 +22,6 @@
     path: /etc/hosts
     line: "{{freeipa_address}} {{ freeipa_hostname }}"
 
-- name: Ensure firewalld service is [ {{ freeipa_firewall_state }} ]
-  service:
-    name: firewalld
-    state: "{{ freeipa_firewall_state }}"
-    enabled: yes
-  tags:
-    - freeipa
-    - freeipa_security
-    - config
-
 - name: Ensure firewall rules for [ {{ freeipa_services | join(", ") }} ] are enabled
   firewalld:
     service: "{{ item }}"
