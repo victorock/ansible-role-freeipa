@@ -80,6 +80,7 @@
   rescue:
     - name: Save logfile /var/log/ipaserver-install.log to [ /var/log/ipaserver-install.log-{{ freeipa_time }} ]
       copy:
+        remote_src: yes
         src: /var/log/ipaserver-install.log
         dest: "/var/log/ipaserver-install.log-{{ freeipa_time }}"
 
