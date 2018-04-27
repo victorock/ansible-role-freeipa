@@ -28,9 +28,12 @@ Example playbook to setup the IPA server using admin and dirman passwords from a
       vars_files:
       - playbook_sensitive_data.yml
 
-      roles:
-      - role: ipaserver
-        state: present
+      tasks:
+        - include_role:
+            name: ipaserver
+            tasks_from: run
+          vars:
+            state: present
 
 Example playbook to unconfigure the IPA client(s) using principal and password from inventory file:
 
@@ -38,9 +41,12 @@ Example playbook to unconfigure the IPA client(s) using principal and password f
       hosts: ipaserver
       become: true
 
-      roles:
-      - role: ipaserver
-        state: absent
+      tasks:
+        - include_role:
+            name: ipaserver
+            tasks_from: run
+          vars:
+            state: absent
 
 Example inventory file with fixed domain, realm, admin and dirman passwords:
 
@@ -59,9 +65,12 @@ Example playbook to setup the IPA server using admin and dirman passwords from i
       hosts: ipaserver
       become: true
 
-      roles:
-      - role: ipaserver
-        state: present
+      tasks:
+        - include_role:
+            name: ipaserver
+            tasks_from: run
+          vars:
+            state: present
 
 Variables
 ---------

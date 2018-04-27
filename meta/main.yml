@@ -1,20 +1,23 @@
 ---
+dependencies:
+  - role: victorock.ipaclient
+
 galaxy_info:
-  author: victorock
+  author: Thomas Woerner, Victor da Costa
   description: A role to setup an iPA domain server
+  company: Red Hat, Inc
   license: GPLv3
   min_ansible_version: 2.4
   platforms:
   - name: Fedora
     versions:
-      - 25
-      - 26
-      - 27
+        - 25
+        - 26
+        - 27
   - name: rhel
     versions:
-      - 7.3
-      - 7.4
+        - 7.3
+        - 7.4
   galaxy_tags:
-    - FreeIPA
-
-dependencies: []
+    - identity
+    - ipa

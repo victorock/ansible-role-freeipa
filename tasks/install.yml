@@ -322,6 +322,7 @@
   - name: Install - Setup client
     include_role:
       name: victorock.ipaclient
+      tasks_from: run
     vars:
       state: present
       ipaclient_on_master: yes
