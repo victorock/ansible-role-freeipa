@@ -6,4 +6,4 @@
     test: yes
 
   roles:
-    - ansible-role-freeipa
+    - ansible-role-ipaserver
