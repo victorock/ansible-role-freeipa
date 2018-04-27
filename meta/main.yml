@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - role: victorock.ipa
   - role: victorock.ipaclient
 
 galaxy_info:
